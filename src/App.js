@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import MyHomepage from './components/MyHomepage';
+
+const getTheme = (mode) => createTheme({
+  palette: {
+    mode,
+  },
+});
 
 function App() {
+  const [mode, setMode] = React.useState('light');
+
+  const toggleColorMode = () => {
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+  };
+
+  const theme = React.useMemo(() => getTheme(mode), [mode]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/" element={<MyHomepage mode={mode} toggleColorMode={toggleColorMode} />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 
